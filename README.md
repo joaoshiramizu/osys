@@ -18,19 +18,19 @@ Backend:
 
 
 Como Executar o Projeto:
-- Clonar o repositório
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
-cd nome-do-repositorio
+Clonar o repositório:
+- git clone https://github.com/seu-usuario/nome-do-repositorio.git
+- cd nome-do-repositorio
 
-- Executar o frontend
-cd frontend
-npm install
-npm start
+Executar o frontend:
+- cd frontend
+- npm install
+- npm start
 
-- Executar o backend (caso tenha API própria)
-cd backend
-npm install
-node index.js
+Executar o backend (caso tenha API própria)
+- cd backend
+- npm install
+- node index.js
 
 
 
