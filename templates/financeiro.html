@@ -1,0 +1,132 @@
+<!-- Página financeiro.html corrigida para enviar os dados corretamente -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSYS - Financeiro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="index.html">Página Inicial</a>
+    <a href="Clientes.html">Clientes</a>
+    <a href="ordens.html">Ordens de Serviço</a>
+    <a href="servicos.html">Serviços e Peças</a>
+    <a href="financeiro.html">Financeiro</a>
+  </div>
+
+  <div class="resultado-container">
+    <h2>Financeiro</h2>
+    <h2>Selecione o período da consulta</h2>
+
+    <form id="relatorioForm">
+      <div class="busca-flex">
+        <div class="busca-form">
+          <div class="form-group">
+            <label for="data-inicio">Data de Início:</label>
+            <input type="date" id="data-inicio" name="data-inicio">
+          </div>
+        </div>
+
+        <div class="busca-form">
+          <div class="form-group">
+            <label for="data-final">Data Final:</label>
+            <input type="date" id="data-final" name="data-final">
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 30px; color: #0278ff;">Selecione os dados do relatório:</h3>
+      <div class="busca-flex">
+        <div class="busca-form">
+          <div class="form-group">
+            <input type="checkbox" id="pecas" name="pecas">
+            <label for="pecas">Gasto com peças</label>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="servicos" name="servicos">
+            <label for="servicos">Ganho com serviços</label>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="descontos" name="descontos">
+            <label for="descontos">Total de descontos</label>
+          </div>
+        </div>
+
+        <div class="busca-form">
+          <div class="form-group">
+            <input type="checkbox" id="clientes" name="clientes">
+            <label for="clientes">Clientes atendidos</label>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="fechadas" name="fechadas">
+            <label for="fechadas">Ordens de serviço fechadas</label>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="abertas" name="abertas">
+            <label for="abertas">Ordens de serviço abertas</label>
+          </div>
+        </div>
+      </div>
+<div style="text-align: center; margin-top: 20px;">
+  <button id="gerar-relatorio" type="button" class="btn">Gerar Relatório</button>
+</div>
+    </form>
+  </div>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnRelatorio = document.getElementById('gerar-relatorio');
+
+    if (btnRelatorio) {
+      btnRelatorio.addEventListener('click', () => {
+        const dataInicio = document.getElementById('data-inicio').value;
+        const dataFinal = document.getElementById('data-final').value;
+
+        const pecas = document.getElementById('pecas').checked;
+        const servicos = document.getElementById('servicos').checked;
+        const descontos = document.getElementById('descontos').checked;
+        const clientes = document.getElementById('clientes').checked;
+        const fechadas = document.getElementById('fechadas').checked;
+        const abertas = document.getElementById('abertas').checked;
+
+        const params = new URLSearchParams({
+          dataInicio,
+          dataFinal,
+          pecas,
+          servicos,
+          descontos,
+          clientes,
+          fechadas,
+          abertas
+        });
+
+        window.location.href = `relatorio.html?${params.toString()}`;
+      });
+    }
+
+    // Menu lateral
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-btn');
+    if (sidebar && toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

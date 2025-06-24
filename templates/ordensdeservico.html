@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OSYS - Busca de Ordens de Serviço</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+  
+  <div class="busca-container">
+    <h2>Buscar Ordens de Serviço</h2>
+    <div class="busca-flex">
+      <div class="busca-form">
+        <div class="form-group">
+          <label for="campo-busca">Buscar por:</label>
+          <select id="campo-busca">
+            <option value="cliente">Cliente</option>
+            <option value="entrada">Data de Entrada</option>
+            <option value="saida">Data de Saída</option>
+            <option value="codigo">Código do Aparelho</option>
+            <option value="idOS">Código da OS</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="filtro">Filtro:</label>
+          <select id="filtro">
+            <option value="todos">Todas OS</option>
+            <option value="aberta">OS Abertas</option>
+            <option value="fechada">OS Finalizadas</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="termodebusca">Digite o termo de busca:</label>
+          <input type="text" id="termodebusca" placeholder="Digite aqui">
+        </div>
+        <button class="btn" id="buscar-btn">Buscar</button>
+      </div>
+
+      <div class="cliente-novo-box">
+        <br><p>Nova Ordem de Serviço</p>
+        <a href="cadastro-os.html" class="btn">Cadastrar</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Toggle do menu lateral
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('toggle-btn');
+      if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+        });
+      }
+
+      // Campo de data ou texto
+      const campoSelect = document.getElementById("campo-busca");
+      const termoInput = document.getElementById("termodebusca");
+
+      campoSelect.addEventListener("change", function () {
+        const valorSelecionado = campoSelect.value;
+        if (valorSelecionado === "entrada" || valorSelecionado === "saida") {
+          termoInput.type = "date";
+          termoInput.placeholder = "";
+        } else {
+          termoInput.type = "text";
+          termoInput.placeholder = "Digite aqui";
+        }
+      });
+
+      // Botão Buscar
+      document.getElementById('buscar-btn').addEventListener('click', function () {
+        const campo = document.getElementById('campo-busca').value;
+        const filtro = document.getElementById('filtro').value;
+        const valor = document.getElementById('termodebusca').value;
+
+        const url = `busca-os.html?campo=${encodeURIComponent(campo)}&valor=${encodeURIComponent(valor)}&filtro=${encodeURIComponent(filtro)}`;
+        window.location.href = url;
+      });
+    });
+  </script>
+</body>
+</html>

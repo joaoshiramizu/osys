@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSYS - Resultado da Busca</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('toggle-btn');
+
+      if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+        });
+      }
+    });
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  if (!id) {
+    alert("Cliente não especificado!");
+    return;
+  }
+
+  try {
+    // Carrega os dados dos clientes
+    const response = await fetch('clientes.json');
+    const clientes = await response.json();
+
+    const cliente = clientes.find(c => c.id == id);
+
+    if (!cliente) {
+      alert("Cliente não encontrado.");
+      return;
+    }
+
+    // Preenche os dados do cliente na tabela
+    document.getElementById('cliente-nome').textContent = cliente.nome;
+    document.getElementById('cliente-endereco').textContent = cliente.endereco;
+    document.getElementById('cliente-bairro').textContent = cliente.bairro;
+    document.getElementById('cliente-cidade').textContent = cliente.cidade;
+    document.getElementById('cliente-telefone').textContent = cliente.telefone;
+
+    // Agora carrega as ordens de serviço
+    const osResponse = await fetch('os.comnull.json');
+    const ordens = await osResponse.json();
+
+    // Filtra ordens com base no id do cliente
+    const abertas = ordens.filter(os => os.idOS == id && !os.saida);
+    const fechadas = ordens.filter(os => os.idOS == id && os.saida);
+
+    // Seleciona as tabelas corretas
+    const tabelaAbertas = document.querySelectorAll('table')[1]; // segunda tabela
+    const tabelaFechadas = document.querySelectorAll('table')[2]; // terceira tabela
+
+    document.getElementById('editar-link').href = `editar-cliente.html?id=${id}`;
+    document.querySelector('.editar-btn').href = `editar-cliente.html?id=${id}`;
+
+    // Preencher OS Abertas
+    abertas.forEach(os => {
+      const row = `
+        <tr>
+          <td>#${os.codigo}</td>
+          <td>${os.entrada}</td>
+          <td>${os.aparelho} ${os.marca} ${os.modelo}</td>
+          <td><a href="ideapad3.html?id=${os.id}&idos=${os.idOS}"class="detalhes-btn">Ver Detalhes</a></td>
+        </tr>
+      `;
+      tabelaAbertas.insertAdjacentHTML('beforeend', row);
+    });
+
+    // Preencher OS Fechadas
+    fechadas.forEach(os => {
+      const row = `
+        <tr>
+          <td>#${os.codigo}</td>
+          <td>${os.entrada}</td>
+          <td>${os.saida}</td>
+          <td>${os.aparelho} ${os.marca} ${os.modelo}</td>
+          <td><a href="ideapad3.html?id=${os.id}&idOS=${os.idOS}"class="detalhes-btn">Ver Detalhes</a></td>
+        </tr>
+      `;
+      tabelaFechadas.insertAdjacentHTML('beforeend', row);
+    });
+
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+  }
+});
+</script>
+
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="buscar-cliente-os.html">Buscar Cliente</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+
+  <div class="resultado-container">
+    <h2>Informações do Cliente</h2>
+    <a id="editar-link" class="editar-btn">Editar</a>
+    <table>
+      <tr><th>Campo</th><th>Informação</th></tr>
+      <tr><td>Nome</td><td id="cliente-nome"></td></tr>
+      <tr><td>Endereço</td><td id="cliente-endereco"></td></tr>
+      <tr><td>Bairro</td><td id="cliente-bairro"></td></tr>
+      <tr><td>Cidade</td><td id="cliente-cidade"></td></tr>
+      <tr><td>Telefone</td><td id="cliente-telefone"></td></tr>
+    </table>
+
+
+    <h2>Ordens de Serviço Abertas</h2>
+    <table>
+      <tr><th>OS</th><th>Data Entrada</th><th>Aparelho</th><th>Ações</th></tr>
+      <tr>
+      </tr>
+    </table>
+
+    <h2>Ordens de Serviço Fechadas</h2>
+    <table>
+      <tr><th>OS</th><th>Data Entrada</th><th>Data Saída</th><th>Aparelho</th><th>Ações</th></tr>
+      <tr>
+      </tr>
+    </table>
+    <a href="javascript:history.back()" class="detalhes-btn">Voltar</a>
+  </div>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+
+</body>
+</html>

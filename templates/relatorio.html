@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSYS - Relatório</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+
+  <div class="resultado-container">
+    <h2>Relatório</h2>
+    <a href="#" class="editar-btn">Gerar PDF</a>
+    <div id="relatorio-conteudo"></div>
+    <a href="financeiro.html" class="btn">Voltar</a>
+  </div>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('toggle-btn');
+      if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+        });
+      }
+
+      const container = document.getElementById('relatorio-conteudo');
+      const params = new URLSearchParams(window.location.search);
+      const dataInicio = params.get('dataInicio');
+      const dataFinal = params.get('dataFinal');
+
+      const mostrar = {
+        pecas: params.get('pecas') === 'true',
+        servicos: params.get('servicos') === 'true',
+        descontos: params.get('descontos') === 'true',
+        clientes: params.get('clientes') === 'true',
+        fechadas: params.get('fechadas') === 'true',
+        abertas: params.get('abertas') === 'true'
+      };
+
+      const parseDate = (str) => {
+        const [ano, mes, dia] = str.split('-').map(Number);
+        return new Date(ano, mes - 1, dia);
+      };
+
+      const formatDateBR = (dateStr) => {
+        const [dia, mes, ano] = dateStr.split('/');
+        return new Date(`${ano}-${mes}-${dia}`);
+      };
+
+      const dataInicioDate = parseDate(dataInicio);
+      const dataFinalDate = parseDate(dataFinal);
+      
+      const ordens = await (await fetch('os.comnull.json')).json();
+      const clientes = await (await fetch('clientes.json')).json();
+
+      const ordensFiltradas = ordens.filter(os => {
+        if (!os.entrada) return false;
+        const data = formatDateBR(os.entrada);
+        return data >= dataInicioDate && data <= dataFinalDate;
+      });
+
+      const clientesAtendidos = new Set();
+      let totalPecas = 0;
+      let totalServicos = 0;
+      let totalDescontos = 0;
+      let abertas = 0;
+      let fechadas = 0;
+
+      ordensFiltradas.forEach(os => {
+        if (os.idOS) clientesAtendidos.add(os.idOS);
+        if (os.valorpecas) totalPecas += Number(os.valorpecas);
+        if (os.valorservico) totalServicos += Number(os.valorservico);
+        if (os.desconto) totalDescontos += Number(os.desconto);
+        if (os.saida) fechadas++;
+        else abertas++;
+      });
+
+      let relatorioHTML = '<table><tr><th>Campo</th><th>Informação</th></tr>';
+      if (mostrar.pecas) relatorioHTML += `<tr><td>Gasto com peças</td><td>R$ ${totalPecas.toFixed(2)}</td></tr>`;
+      if (mostrar.servicos) relatorioHTML += `<tr><td>Ganho com serviços</td><td>R$ ${totalServicos.toFixed(2)}</td></tr>`;
+      if (mostrar.descontos) relatorioHTML += `<tr><td>Total de descontos</td><td>R$ ${totalDescontos.toFixed(2)}</td></tr>`;
+      if (mostrar.clientes) relatorioHTML += `<tr><td>Clientes atendidos</td><td>${clientesAtendidos.size}</td></tr>`;
+      if (mostrar.fechadas) relatorioHTML += `<tr><td>Ordens de serviço fechadas</td><td>${fechadas}</td></tr>`;
+      if (mostrar.abertas) relatorioHTML += `<tr><td>Ordens de serviço abertas</td><td>${abertas}</td></tr>`;
+
+      // Margem de lucro
+      if (mostrar.servicos && mostrar.pecas) {
+        const lucro = totalServicos - totalPecas;
+        relatorioHTML += `<tr><td>Margem de lucro das OS</td><td>R$ ${lucro.toFixed(2)}</td></tr>`;
+      }
+
+      relatorioHTML += '</table>';
+
+      relatorioHTML += `
+        <table>
+          <tr><th>Campo</th><th>Informação</th></tr>
+          <tr><td>Início do relatório</td><td>${dataInicio.split('-').reverse().join('/')}</td></tr>
+          <tr><td>Fim do relatório</td><td>${dataFinal.split('-').reverse().join('/')}</td></tr>
+        </table>
+      `;
+
+      container.innerHTML = relatorioHTML;
+    });
+  </script>
+</body>
+</html>

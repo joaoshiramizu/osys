@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSYS - Resultado da Busca</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="ordensdeservico.html">Buscar Ordem de Serviço</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+
+  <div class="resultado-container">
+    <h2>Resultados da Busca</h2>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const campoSelecionado = params.get('campo');
+  let valorBuscado = (params.get('valor') || '').toLowerCase(); // mantido seu nome
+  const filtro = params.get('filtro');
+
+  const campoTraduzido = {
+    cliente: 'nome',
+    entrada: 'entrada',
+    saida: 'saida',
+    codigo: 'codigo',
+    idOS: 'idOS'
+  };
+
+  const campo = campoTraduzido[campoSelecionado];
+
+  // ✅ Corrige valorBuscado se for uma data no formato yyyy-mm-dd
+  if ((campoSelecionado === 'entrada' || campoSelecionado === 'saida') && valorBuscado.includes('-')) {
+    const [ano, mes, dia] = valorBuscado.split('-');
+    valorBuscado = `${dia}/${mes}/${ano}`;
+  }
+
+  const osResponse = await fetch('os.comnull.json');
+  const ordens = await osResponse.json();
+
+  const clientesResponse = await fetch('clientes.json');
+  const clientes = await clientesResponse.json();
+
+  let resultados = ordens;
+
+  if (campo === 'nome' && valorBuscado) {
+    const clienteEncontrado = clientes.find(c => c.nome.toLowerCase().includes(valorBuscado));
+    resultados = clienteEncontrado ? ordens.filter(os => os.idOS === clienteEncontrado.id) : [];
+  } else if (valorBuscado && campo !== 'nome') {
+    resultados = resultados.filter(os =>
+      (os[campo] || '').toString().toLowerCase().includes(valorBuscado)
+    );
+  }
+
+  if (filtro === 'aberta') {
+    resultados = resultados.filter(os => !os.saida);
+  } else if (filtro === 'fechada') {
+    resultados = resultados.filter(os => os.saida);
+  }
+
+  const container = document.querySelector('.resultado-container');
+  if (resultados.length === 0) {
+    container.innerHTML += '<p>Nenhuma OS encontrada.</p>';
+    return;
+  }
+
+  const emAberto = resultados.filter(os => !os.saida);
+  const fechadas = resultados.filter(os => os.saida);
+
+  function renderTabela(titulo, lista, mostrarSaida = false) {
+    let html = `<h2>${titulo}</h2><table><tr><th>Cliente</th><th>Entrada</th>`;
+    if (mostrarSaida) html += '<th>Saída</th>';
+    html += '<th>Código</th><th>Aparelho</th><th>Ações</th></tr>';
+
+    lista.forEach(os => {
+      const cliente = clientes.find(c => c.id === os.idOS);
+      const nomeCliente = cliente ? cliente.nome : 'Desconhecido';
+      html += '<tr><td>' + nomeCliente + '</td><td>' + os.entrada + '</td>';
+      if (mostrarSaida) html += '<td>' + (os.saida || '-') + '</td>';
+      html += '<td>#' + os.codigo + '</td>';
+      html += '<td>' + os.aparelho + '</td>';
+      html += `<td><a href="ideapad3.html?id=${os.id}&idos=${os.idOS}" class="detalhes-btn">Ver Detalhes</a></td></tr>`;
+    });
+
+    container.innerHTML += html + '</table>';
+  }
+
+  if (emAberto.length) renderTabela('Ordens em Aberto', emAberto);
+  if (fechadas.length) renderTabela('Ordens Fechadas', fechadas, true);
+});
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSYS - Ordem 5556</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="ordensdeservico.html">Buscar Ordem de Serviço</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+
+  <div class="resultado-container">
+    <h2></h2>
+    <a id="btn-editar" href="#" class="editar-btn">Editar</a>
+    <table>
+      <tr><th>Campo</th><th>Informação</th></tr>
+      <tr><td>Cliente</td><td id="os-cliente">...</td></tr>
+      <tr><td>Data de Entrada</td><td id="os-entrada">...</td></tr>
+      <tr><td>Aparelho</td><td id="os-aparelho">...</td></tr>
+      <tr><td>Marca</td><td id="os-marca">...</td></tr>
+      <tr><td>Modelo</td><td id="os-modelo">...</td></tr>
+      <tr><td>Série</td><td id="os-serie">...</td></tr>
+      <tr><td>Defeito</td><td id="os-defeito">...</td></tr>
+    </table>
+
+    <table>
+      <tr><th>Observação</th></tr>
+      <tr><td id="os-observacao">...</td></tr>
+    </table>
+
+
+    <a id="btn-valores" href="#" class="detalhes-btn">Valores</a>
+
+    <a id="btn-voltar" href="#" class="detalhes-btn">Voltar</a>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('toggle-btn');
+
+      if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+        });
+      }
+    });
+  </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const osId = parseInt(params.get("id"));
+  const osIdos = parseInt(params.get("idos"));
+
+  if (!osId) {
+    alert("OS não especificada!");
+    return;
+  }
+  if (!osIdos) {
+    alert("Cliente não especificado!");
+    return;
+  }
+
+  try {
+    // Carrega os dados de OS
+    const osResponse = await fetch('os.comnull.json');
+    const ordens = await osResponse.json();
+    
+    // Busca pela nova chave única "id"
+    const os = ordens.find(o => o.id === osId);
+
+    if (!os) {
+      alert("Ordem de serviço não encontrada.");
+      return;
+    }
+
+    // Preencher os campos da página
+    document.title = `OSYS - Ordem ${os.codigo}`;
+    document.querySelector('h2').textContent = `Ordem #${os.codigo}`;
+
+    document.getElementById("os-entrada").textContent = os.entrada || '-';
+    document.getElementById("os-aparelho").textContent = os.aparelho || '-';
+    document.getElementById("os-marca").textContent = os.marca || '-';
+    document.getElementById("os-modelo").textContent = os.modelo || '-';
+    document.getElementById("os-serie").textContent = os.serie || '-';
+    document.getElementById("os-defeito").textContent = os.defeito || '-';
+    document.getElementById("os-observacao").textContent = os.observacao || '-';
+
+    // Buscar cliente vinculado à OS (via idOS)
+    const clientesResponse = await fetch('clientes.json');
+    const clientes = await clientesResponse.json();
+    const cliente = clientes.find(c => c.id == osIdos);
+
+    let clienteHTML = "Cliente não identificado";
+    if (cliente) {
+      clienteHTML = `${cliente.nome} <a href="joao.html?id=${cliente.id}" class="detalhes-btn">Detalhes</a>`;
+    }
+
+    document.getElementById("os-cliente").innerHTML = clienteHTML;
+
+    if (cliente) {
+      const clienteId = cliente.id;
+      document.getElementById("btn-editar").href = `editar-OS.html?id=${os.id}&cliente=${clienteId}`;
+      document.getElementById("btn-valores").href = `valoresOS.html?id=${os.id}&cliente=${clienteId}`;
+    }
+
+    document.getElementById("btn-voltar").href = `javascript:history.back()`;
+
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+    alert("Erro ao carregar os dados da OS.");
+  }
+});
+</script>
+
+
+
+</body>
+</html>

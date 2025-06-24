@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OSYS - Editar OS</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header><h1>OSYS</h1></header>
+
+  <button id="toggle-btn">☰ Menu</button>
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="buscar-cliente-os.html">Buscar cliente</a>
+    <a href="busca-os.html">Buscar Ordem de Serviço</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+
+  <div class="cadastro-container">
+    <h2>Editar Ordem de Serviço</h2>
+    <form class="cadastro-form" id="form-editar-os2">
+      <div class="cadastro-group">
+        <label for="valorpecas">Valor das Peças*</label>
+        <input type="number" step="0.01" id="valorpecas" required />
+      </div>
+      <div class="cadastro-group">
+        <label for="valorservico">Valor do Serviço*</label>
+        <input type="number" step="0.01" id="valorservico" required />
+      </div>
+      <div class="cadastro-group">
+        <label for="desconto">Desconto</label>
+        <input type="number" step="0.01" id="desconto" value="0" />
+      </div>
+
+      <div class="cadastro-actions">
+        <a href="#" id="btn-cancelar" class="btn">Cancelar</a>
+        <button type="submit" class="btn">Salvar</button>
+      </div>
+    </form>
+  </div>
+
+  <footer><h1>CoreInfo</h1></footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Sidebar toggle
+      const sidebar = document.getElementById('sidebar');
+      document.getElementById('toggle-btn').addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      const cliente = params.get("cliente");
+
+      if (!id || !cliente) {
+        alert("Parâmetros da OS incompletos.");
+        return;
+      }
+
+      document.getElementById("btn-cancelar").href = `ideapad3.html?id=${id}`;
+
+      let os = null;
+      try {
+        const resposta = await fetch("os.comnull.json");
+        const ordens = await resposta.json();
+        os = ordens.find(o => o.id == id);
+
+        if (!os) {
+          alert("Ordem de serviço não encontrada.");
+          return;
+        }
+
+        // Preenche os campos com valores atuais
+        document.getElementById("valorpecas").value = os.valorpecas || 0;
+        document.getElementById("valorservico").value = os.valorservico || 0;
+        document.getElementById("desconto").value = os.desconto || 0;
+
+      } catch (erro) {
+        console.error("Erro ao carregar OS:", erro);
+        alert("Erro ao buscar dados da OS.");
+        return;
+      }
+
+      // Envia os dados atualizados
+      document.getElementById("form-editar-os2").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const osAtualizada = {
+          ...os,
+          valorpecas: parseFloat(document.getElementById("valorpecas").value),
+          valorservico: parseFloat(document.getElementById("valorservico").value),
+          desconto: parseFloat(document.getElementById("desconto").value || 0)
+        };
+
+        try {
+          const resposta = await fetch(`/api/os/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(osAtualizada)
+          });
+
+          if (resposta.ok) {
+            alert("Ordem de serviço atualizada com sucesso!");
+            window.location.href = `ideapad3.html?id=${id}&idOS=${cliente}`;
+          } else {
+            const erro = await resposta.json();
+            alert("Erro ao salvar: " + (erro.erro || "Erro desconhecido"));
+          }
+        } catch (erro) {
+          console.error("Erro ao enviar dados:", erro);
+          alert("Erro ao enviar dados.");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
