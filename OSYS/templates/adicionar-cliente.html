@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSYS - Resultado da Busca</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="buscar-cliente-os.html">Buscar cliente</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+
+  <div class="resultado-container">
+    <h2>Resultados da Busca</h2>
+
+    <h2>Clientes</h2>
+    <table>
+    </table>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('toggle-btn');
+
+      if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+        });
+      }
+    });
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Função auxiliar para pegar parâmetros da URL
+  function getQueryParam(param) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(param);
+  }
+
+  const campo = getQueryParam('campo');
+  const valor = getQueryParam('valor')?.toLowerCase();
+
+  // Carrega o JSON com os clientes
+  const response = await fetch('clientes.json'); // ajuste se estiver em outra pasta
+  const clientes = await response.json();
+
+  let resultados = [];
+
+  if (campo === 'estado' || !valor) {
+    resultados = clientes;
+  } else {
+    resultados = clientes.filter(c => {
+      const campoValor = (c[campo] || '').toString().toLowerCase();
+      return campoValor.includes(valor);
+    });
+  }
+
+  const container = document.querySelector('.resultado-container');
+
+  if (resultados.length === 0) {
+    container.innerHTML += `<p>Nenhum cliente encontrado.</p>`;
+    return;
+  }
+
+  const tabela = document.createElement('table');
+  tabela.innerHTML = `
+    <tr>
+      <th>Nome</th>
+      <th>Endereço</th>
+      <th>Bairro</th>
+      <th>Cidade</th>
+      <th>Ações</th>
+    </tr>
+  `;
+
+  resultados.forEach(cliente => {
+    tabela.innerHTML += `
+      <tr>
+        <td>${cliente.nome}</td>
+        <td>${cliente.endereco}</td>
+        <td>${cliente.bairro}</td>
+        <td>${cliente.cidade}</td>
+        <td><a href="joao.html?id=${cliente.id}" class="detalhes-btn">Ver Detalhes</a></td>
+      </tr>
+    `;
+  });
+
+  container.appendChild(tabela);
+});
+</script>
+
+</body>
+</html>

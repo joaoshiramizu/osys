@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OSYS - Cadastro de Cliente</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="Java.js"></script>
+</head>
+
+<script>
+document.querySelector('.cadastro-form').addEventListener('submit', async (e) => {
+  e.preventDefault(); // Evita o envio tradicional do formulário
+
+  const cliente = {
+    nome: document.getElementById('nome').value,
+    endereco: document.getElementById('endereco').value,
+    bairro: document.getElementById('bairro').value,
+    cidade: document.getElementById('cidade').value,
+    estado: document.getElementById('estado').value,
+    telefone: document.getElementById('telefone').value
+  };
+
+  try {
+    const resposta = await fetch('/api/clientes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cliente)
+    });
+
+    const resultado = await resposta.json();
+
+    if (resposta.ok) {
+      alert('Cliente cadastrado com sucesso!');
+      window.location.href = 'buscar-cliente-os.html';
+    } else {
+      alert('Erro: ' + resultado.erro);
+    }
+  } catch (erro) {
+    console.error(erro);
+    alert('Erro ao cadastrar cliente.');
+  }
+});
+</script>
+
+
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="buscar-cliente-os.html">Buscar cliente</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+  
+
+  <div class="cadastro-container">
+    <h2>Cadastro de Cliente</h2>
+    <form class="cadastro-form">
+      <div class="cadastro-group">
+        <label for="nome">Nome Completo*</label>
+        <input type="text" id="nome" required />
+      </div>
+      <div class="cadastro-group">
+        <label for="endereco">Endereço</label>
+        <input type="text" id="endereco" />
+      </div>
+      <div class="cadastro-group">
+        <label for="bairro">Bairro</label>
+        <input type="text" id="bairro" />
+      </div>
+      <div class="cadastro-group">
+        <label for="cidade">Cidade</label>
+        <input type="text" id="cidade" />
+      </div>
+      <div class="cadastro-group">
+        <label for="estado">Estado</label>
+        <input type="text" id="estado" />
+      </div>
+      <div class="cadastro-group">
+        <label for="telefone">Telefone*</label>
+        <input type="text" id="telefone" required />
+      </div>
+
+      <div class="cadastro-actions">
+        <button type="submit" class="btn">Salvar</button>
+      </div>
+    </form>
+  </div>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-btn');
+
+    if (sidebar && toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+      });
+    }
+
+    // === FORMULÁRIO DE CADASTRO ===
+    const form = document.querySelector('.cadastro-form');
+
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const cliente = {
+          nome: document.getElementById('nome').value,
+          endereco: document.getElementById('endereco').value,
+          bairro: document.getElementById('bairro').value,
+          cidade: document.getElementById('cidade').value,
+          estado: document.getElementById('estado').value,
+          telefone: document.getElementById('telefone').value
+        };
+
+        try {
+          const resposta = await fetch('/api/clientes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cliente)
+          });
+
+          const resultado = await resposta.json();
+
+          if (resposta.ok) {
+            alert('Cliente cadastrado com sucesso!');
+            window.location.href = 'buscar-cliente-os.html';
+          } else {
+            alert('Erro: ' + resultado.erro);
+          }
+        } catch (erro) {
+          console.error(erro);
+          alert('Erro ao cadastrar cliente.');
+        }
+      });
+    }
+  });
+</script>
+  
+</body>
+</html>

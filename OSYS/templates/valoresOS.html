@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSYS - Ordem 5556</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+
+  <div class="resultado-container">
+    <h2></h2>
+    <a id="btn-editar" href="#" class="editar-btn">Editar</a>
+    <table>
+      <tr><th>Campo</th><th>Informação</th></tr>
+      <tr><td>Valor das Peças</td><td id="valorpecas">...</td></tr>
+      <tr><td>Valor do Serviço</td><td id="valorservico">...</td></tr>
+      <tr><td>Desconto</td><td id="desconto">...</td></tr>
+      <tr><th>Total</th><th id="total">...</th></tr>
+    </table>
+    <a href="javascript:history.back()" class="detalhes-btn">Voltar</a>
+  </div>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('toggle-btn');
+
+      if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+        });
+      }
+    });
+  </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('toggle-btn');
+
+      if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+        });
+      }
+    });
+  </script>
+
+<script>
+      document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.getElementById('sidebar');
+      const toggleBtn = document.getElementById('toggle-btn');
+
+      if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          sidebar.classList.toggle('closed');
+        });
+      }
+    });
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const osId = params.get("id");
+
+  if (!osId) {
+    alert("OS não especificada!");
+    return;
+  }
+
+  try {
+    // Carrega os dados de OS
+    const osResponse = await fetch('os.comnull.json');
+    const ordens = await osResponse.json();
+    const os = ordens.find(o => o.id == osId);
+
+    if (!os) {
+      alert("Ordem de serviço não encontrada.");
+      return;
+    }
+
+    // Preencher os campos da página
+    document.title = `OSYS - Ordem ${os.id}`;
+    document.querySelector('h2').textContent = `Ordem #${os.codigo}`;
+
+    document.getElementById("valorpecas").textContent = os.valorpecas || '-';
+    document.getElementById("valorservico").textContent = os.valorservico || '-';
+    document.getElementById("desconto").textContent = os.desconto || '-';
+    document.getElementById("total").textContent = os.valorpecas+os.valorservico-os.desconto || '-';
+
+    // Buscar cliente
+    const clientesResponse = await fetch('clientes.json');
+    const clientes = await clientesResponse.json();
+    const cliente = clientes.find(c => c.id == os.idOS);
+
+    let clienteHTML = "Cliente não identificado";
+    if (cliente) {
+      clienteHTML = `${cliente.nome} <a href="joao.html?id=${cliente.id}" class="detalhes-btn">Detalhes</a>`;
+    }
+
+    document.getElementById("os-cliente").innerHTML = clienteHTML;
+    if (cliente) {
+    const clienteId = cliente.id;
+
+      document.getElementById("btn-editar").href = `editar-OS2.html?id=${os.id}&cliente=${clienteId}`;
+    }
+
+  } catch (error) {
+    console.error("Erro ao carregar dados:", error);
+  }
+});
+</script>
+
+</body>
+</html>

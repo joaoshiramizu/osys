@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSYS - Painel</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body class="inicio">
+    <header>
+        <h1>OSYS</h1>
+    </header>
+
+    <button id="toggle-btn">☰ Menu</button>
+
+    <div id="sidebar" class="sidebar closed">
+        <h3>Menu</h3>
+        <a href="#">Ajuda</a>
+        <a href="#">Sobre</a>
+        <a href="Inicio.html">Sair</a>
+    </div>
+
+    <div class="main-content">
+    <h2>Painel Principal</h2>
+    <div class="painel-botoes">
+        <a href="buscar-cliente-os.html" class="painel-btn">
+        <span class="icone">👤</span>
+        <span class="label">Clientes</span>
+        </a>
+        <a href="ordensdeservico.html" class="painel-btn">
+        <span class="icone">🔧</span>
+        <span class="label">Ordens de Serviço</span>
+        </a>
+        <a href="financeiro.html" class="painel-btn">
+        <span class="icone">📄</span>
+        <span class="label">Financeiro</span>
+        </a>
+    </div>
+    </div>
+
+    <footer>
+        <h1>CoreInfo</h1>
+    </footer>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggle-btn');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('closed');
+        });
+    </script>
+
+</body>
+</html>

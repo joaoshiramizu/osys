@@ -1,0 +1,473 @@
+body {
+    background-color: #eeeeee;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+body.inicio{
+    background-image: url('fundo.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+header {
+    background-color: #0278ff;
+    padding: 20px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 3000;
+}
+
+header h1 {
+    color: #fff;
+    margin: 0;
+}
+
+
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #0278ff;
+    text-align: center;
+    padding: 10px;
+    z-index: 3000;
+}
+
+footer h1 {
+    color: #fff;
+    margin: 0;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+
+.login-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+    color: #0278ff;
+}
+
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-box input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #0278ff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-box input[type="submit"]:hover {
+    background-color: #025ec7;
+}
+
+.botao-login {
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
+    background-color: #0278ff;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.botao-login:hover {
+    background-color: #025ec7;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar h3 {
+    margin-bottom: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin: 10px 0;
+}
+
+.sidebar a:hover {
+    text-decoration: underline;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 120px;
+    margin-left: 780px;
+}
+
+.main-content h2 {
+    margin-bottom: 30px;
+    margin-left: 50px;
+    color: #0278ff;
+}
+
+.menu-button {
+    width: 200px;
+    padding: 15px;
+    margin: 10px;
+    background-color: #0278ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.menu-button:hover {
+    background-color: #025ec7;
+}
+
+#toggle-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #0278ff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.sidebar.closed {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.sidebar {
+    transition: transform 0.3s ease;
+}
+
+.busca-container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 250px;
+  left: 650px;
+}
+
+.busca-container h2 {
+  text-align: center;
+  color: #0278ff;
+  margin-bottom: 20px;
+}
+
+.busca-flex {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.busca-form {
+  flex: 1;
+  min-width: 300px;
+}
+
+.busca-form .form-group {
+  margin-bottom: 15px;
+  width: 280px;
+}
+
+.busca-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.busca-form select,
+.busca-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.cliente-novo-box {
+  flex: 1;
+  min-width: 200px;
+  background-color: #f1f1f1;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.cliente-novo-box p {
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.btn {
+  background-color: #0278ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  background-color: #025ec7;
+}
+
+.cadastro-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  top: 100px;
+}
+
+.cadastro-container h2 {
+  text-align: center;
+  color: #0278ff;
+  margin-bottom: 20px;
+}
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cadastro-form .cadastro-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cadastro-form label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.cadastro-form input,
+.cadastro-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.cadastro-actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.cadastro-actions .btn {
+  background-color: #0278ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cadastro-actions .btn:hover {
+  background-color: #025ec7;
+}
+
+.sidebar {
+  position: fixed;
+  top: 70px; /* ajusta conforme o tamanho do seu header */
+  left: 0;
+  height: calc(100% - 80px);
+  width: 200px;
+  background-color: #0360ca;
+  padding: 20px;
+  color: white;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+.sidebar h3 {
+  margin-top: 0;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin: 10px 0;
+}
+
+.sidebar a:hover {
+  text-decoration: underline;
+}
+
+#toggle-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #0278ff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  z-index: 5001;
+}
+
+.resultado-container {
+  max-width: 1000px;
+  margin: 100px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.resultado-container h2 {
+  text-align: center;
+  color: #0278ff;
+  margin-bottom: 30px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #0278ff;
+  color: white;
+}
+
+.detalhes-btn {
+  padding: 6px 12px;
+  background-color: #0278ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.detalhes-btn:hover {
+  background-color: #025ec7;
+}
+
+.editar-btn {
+  padding: 6px 12px;
+  background-color: #0278ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  position: absolute;
+  top: 160px;
+}
+
+.editar-btn:hover {
+  background-color: #025ec7;
+}
+
+.painel-botoes {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  position: fixed;
+  top: 300px;
+  left: 700px;
+}
+
+.painel-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  background-color: #0278ff;
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s, background-color 0.3s;
+  font-size: 16px;
+}
+
+.painel-btn:hover {
+  background-color: #025ec7;
+  transform: scale(1.05);
+}
+
+.painel-btn .icone {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.painel-btn .label {
+  font-weight: bold;
+}

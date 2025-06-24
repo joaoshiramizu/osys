@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OSYS - Busca de Clientes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>OSYS</h1>
+  </header>
+
+  <button id="toggle-btn">☰ Menu</button>
+
+  <div id="sidebar" class="sidebar closed">
+    <h3>Menu</h3>
+    <a href="opcoes.html">Página Inicial</a>
+    <a href="#">Ajuda</a>
+    <a href="#">Sobre</a>
+    <a href="Inicio.html">Sair</a>
+  </div>
+  
+
+  <div class="busca-container">
+    <h2>Buscar Clientes</h2>
+    <div class="busca-flex">
+      <div class="busca-form">
+        <div class="form-group">
+          <label for="campo">Buscar por:</label>
+          <select id="campo">
+            <option value="estado">Todos</option>
+            <option value="nome">Nome</option>
+            <option value="endereco">Endereço</option>
+            <option value="bairro">Bairro</option>
+            <option value="cidade">Cidade</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="valor">Digite o termo de busca:</label>
+          <input type="text" id="valor" placeholder="Digite aqui">
+        </div>
+        <button id="buscarBtn" class="btn">Buscar</button>
+      </div>
+
+      <div class="cliente-novo-box">
+        <p>Cliente novo</p>
+        <a href="cadastro-cliente.html" class="btn">Cadastrar Cliente</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <h1>CoreInfo</h1>
+  </footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-btn');
+
+    if (sidebar && toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('closed');
+      });
+    }
+
+    // Evento do botão "Buscar"
+    document.getElementById('buscarBtn').addEventListener('click', function () {
+      const campo = document.getElementById('campo').value;
+      const valor = document.getElementById('valor').value;
+      window.location.href = `adicionar-cliente.html?campo=${campo}&valor=${encodeURIComponent(valor)}`;
+    });
+  });
+</script>
+
+  
+
+</body>
+</html>
